@@ -50,6 +50,7 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Trash2 } from "lucide-react";
 
 type Transaction = {
   _id: string;
@@ -87,6 +88,64 @@ export default function TransactionList({ refresh }: { refresh?: boolean }) {
                   </div>
                 </div>
                 <div className="font-bold text-green-600">₹{txn.amount}</div>
+                <button
+                  onClick={async () => {
+                    await axios.delete(`/api/delete-transaction`, {
+                      data: { id: txn._id },
+                    });
+                    setTransactions((prev) =>
+                      prev.filter((t) => t._id !== txn._id)
+                    );
+                    alert("Transaction deleted successfully!");
+                  }}
+                  className="text-red-600 hover:underline"
+                >
+                  <div className="flex items-center space-x-2">
+                    <Trash2 className="w-5 h-5 text-red-600 cursor-pointer" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5 text-blue-600 cursor-pointer"
+                      onClick={async () => {
+                        const newDescription = prompt(
+                          "Enter new description:",
+                          txn.description
+                        );
+                        if (
+                          newDescription &&
+                          newDescription !== txn.description
+                        ) {
+                          try {
+                            await axios.put(`/api/edit-transaction`, {
+                              id: txn._id,
+                              description: newDescription,
+                            });
+                            setTransactions((prev) =>
+                              prev.map((t) =>
+                                t._id === txn._id
+                                  ? { ...t, description: newDescription }
+                                  : t
+                              )
+                            );
+                            alert("Transaction updated successfully!");
+                          } catch (error) {
+                            console.error("Error updating transaction:", error);
+                            alert("Failed to update transaction.");
+                          }
+                        }
+                      }}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.5 19.213l-4.5 1.125 1.125-4.5 12.737-12.351z"
+                      />
+                    </svg>
+                  </div>
+                </button>
               </div>
             </li>
           ))}
