@@ -71,24 +71,23 @@ export default function TransactionList({ refresh }: { refresh?: boolean }) {
   }, [refresh]);
 
   return (
-    <div className="mt-6 space-y-2">
+    <div className="mt-6 space-y-2 max-w-screen-lg mx-auto w-full p-4 bg-white rounded shadow">
       <h2 className="text-xl font-semibold mb-2">Transactions</h2>
       {transactions.length === 0 ? (
         <p>No transactions yet.</p>
       ) : (
-        <ul className="space-y-2">
+        <ul className="space-y-2 w-full">
           {transactions.map((txn) => (
-            <li
-              key={txn._id}
-              className="p-3 border rounded flex justify-between items-center bg-gray-50"
-            >
-              <div>
-                <div className="font-medium">{txn.description}</div>
-                <div className="text-sm text-gray-600">
-                  {txn.category} | {new Date(txn.date).toLocaleDateString()}
+            <li key={txn._id} className="p-3 border rounded bg-gray-50 w-full">
+              <div className="flex justify-between items-center w-full">
+                <div>
+                  <div className="font-medium">{txn.description}</div>
+                  <div className="text-sm text-gray-600 w-full">
+                    {txn.category} | {new Date(txn.date).toLocaleDateString()}
+                  </div>
                 </div>
+                <div className="font-bold text-green-600">₹{txn.amount}</div>
               </div>
-              <div className="font-bold text-green-600">₹{txn.amount}</div>
             </li>
           ))}
         </ul>

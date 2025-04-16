@@ -121,7 +121,7 @@ export default function TransactionForm({ onAdd }: { onAdd?: () => void }) {
 
     setLoading(true);
     try {
-      await axios.post("/api/transactions", {
+      await axios.post("/api/create-transaction", {
         ...form,
         amount: Number(form.amount),
         date: new Date(form.date),
@@ -137,59 +137,61 @@ export default function TransactionForm({ onAdd }: { onAdd?: () => void }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-4 p-4 bg-white rounded shadow"
+      className="w-full max-w-screen-lg mx-auto p-4 bg-white rounded shadow"
     >
-      <div>
-        <label className="block text-sm font-medium">Amount</label>
-        <input
-          type="number"
-          name="amount"
-          value={form.amount}
-          onChange={handleChange}
-          className="w-full mt-1 p-2 border rounded"
-        />
-      </div>
+      <div className="grid grid-cols-1 gap-4">
+        <div>
+          <label className="block text-sm font-medium">Amount</label>
+          <input
+            type="number"
+            name="amount"
+            value={form.amount}
+            onChange={handleChange}
+            className="w-full mt-1 p-2 border rounded"
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium">Date</label>
-        <input
-          type="date"
-          name="date"
-          value={form.date}
-          onChange={handleChange}
-          className="w-full mt-1 p-2 border rounded"
-        />
-      </div>
+        <div>
+          <label className="block text-sm font-medium">Date</label>
+          <input
+            type="date"
+            name="date"
+            value={form.date}
+            onChange={handleChange}
+            className="w-full mt-1 p-2 border rounded"
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium">Description</label>
-        <input
-          type="text"
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          className="w-full mt-1 p-2 border rounded"
-        />
-      </div>
+        <div>
+          <label className="block text-sm font-medium">Description</label>
+          <input
+            type="text"
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            className="w-full mt-1 p-2 border rounded"
+          />
+        </div>
 
-      <div>
-        <label className="block text-sm font-medium">Category</label>
-        <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          className="w-full mt-1 p-2 border rounded"
-        >
-          {categories.map((cat) => (
-            <option key={cat}>{cat}</option>
-          ))}
-        </select>
+        <div>
+          <label className="block text-sm font-medium">Category</label>
+          <select
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            className="w-full mt-1 p-2 border rounded"
+          >
+            {categories.map((cat) => (
+              <option key={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
+        className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 mt-4"
       >
         {loading ? "Saving..." : "Add Transaction"}
       </button>
