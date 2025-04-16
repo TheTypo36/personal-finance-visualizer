@@ -128,7 +128,7 @@ export default function TransactionForm({ onAdd }: { onAdd?: () => void }) {
       });
       if (onAdd) onAdd();
       setForm({ amount: "", date: "", description: "", category: "Other" });
-    } catch (err) {
+    } catch (_err) {
       alert("Error adding transaction");
     }
     setLoading(false);

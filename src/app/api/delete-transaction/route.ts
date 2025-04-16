@@ -1,11 +1,11 @@
 import dbConnect from "@/lib/dbConnect";
 import TransactionModel from "@/models/Transaction";
 
-export async function DELETE(request: Request) {
+export async function DELETE(_request: Request) {
   try {
     await dbConnect();
 
-    const { id } = await request.json();
+    const { id } = await _request.json();
 
     if (!id) {
       return new Response("Missing required fields", { status: 400 });

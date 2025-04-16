@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/dbConnect";
 import TransactionModel from "@/models/Transaction";
 
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
   try {
     await dbConnect();
 

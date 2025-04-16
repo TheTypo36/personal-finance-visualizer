@@ -2,11 +2,11 @@ import dbConnect from "@/lib/dbConnect";
 
 import TransactionModel from "@/models/Transaction";
 
-export async function POST(request: Request) {
+export async function POST(_request: Request) {
   try {
     await dbConnect();
 
-    const { amount, date, description, category } = await request.json();
+    const { amount, date, description, category } = await _request.json();
     if (!amount || !date || !description) {
       return new Response("missing required fields", { status: 400 });
     }
