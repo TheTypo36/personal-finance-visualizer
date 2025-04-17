@@ -6,7 +6,10 @@ export async function PUT(request: Request) {
     await dbConnect();
 
     const { id, amount, date, description, category } = await request.json();
-    if (!id || !amount || !date || !description) {
+    if (!id) {
+      return new Response("missing required fields", { status: 400 });
+    }
+    if (!amount && !date && !description && !category) {
       return new Response("missing required fields", { status: 400 });
     }
 

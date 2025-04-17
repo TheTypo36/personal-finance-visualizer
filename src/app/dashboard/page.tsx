@@ -9,7 +9,7 @@ export default function Dashboard() {
     <main className="flex flex-col items-center justify-between p-24">
       <h1 className="text-3xl font-bold mb-4">Dashboard</h1>
       <TransactionForm onAdd={() => setRefresh(!refresh)} />
-      <TransactionList refresh={true} />
+      <TransactionList refresh={refresh} />
       <MonthlyBarChart />
       <div className="mt-6 space-x-4"></div>
     </main>

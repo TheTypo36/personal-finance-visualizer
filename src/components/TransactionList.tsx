@@ -1,51 +1,3 @@
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-// import { Transaction } from "../models/Transaction"; // Adjust the import path as necessary
-// export const TransactionList = () => {
-//   const [transactions, setTransactions] = useState<Transaction[]>([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchTransactions = async () => {
-//       try {
-//         const response = await axios.get("/api/get-transactions");
-//         if (!response.data.success) {
-//           throw new Error("Failed to fetch transactions");
-//         }
-//         console.log(response.data.transactions);
-//         setTransactions(response.data.transactions);
-//       } catch (error) {
-//         console.error("Error fetching transactions:", error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchTransactions();
-//   }, []);
-
-//   if (loading) return <div>Loading...</div>;
-
-//   return (
-//     <div>
-//       <h1>Transaction List</h1>
-//       {transactions.length === 0 ? (
-//         <p>No transactions found.</p>
-//       ) : (
-//         <ul>
-//           {transactions.map((transaction) => (
-//             <li key={transaction.id}>
-//               {transaction.description} - ${transaction.amount} on{" "}
-//               {transaction.date} - Category: {transaction.category}
-//             </li>
-//           ))}
-//         </ul>
-//       )}
-//     </div>
-//   );
-// };
 "use client";
 
 import { useEffect, useState } from "react";
@@ -63,7 +15,7 @@ type Transaction = {
 export default function TransactionList({ refresh }: { refresh?: boolean }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  useEffect(() => {
+  const editTransactionHandler = useEffect(() => {
     const fetchTransactions = async () => {
       const res = await axios.get("/api/get-transactions");
       setTransactions(res.data.transactions);
@@ -109,24 +61,52 @@ export default function TransactionList({ refresh }: { refresh?: boolean }) {
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="w-5 h-5 text-blue-600 cursor-pointer"
-                      onClick={async () => {
+                      onClick={async (e) => {
+                        e.stopPropagation();
                         const newDescription = prompt(
                           "Enter new description:",
                           txn.description
                         );
+                        const newAmount = prompt(
+                          "Enter new amount:",
+                          txn.amount.toString()
+                        );
+                        const newDate = prompt(
+                          "Enter new date (YYYY-MM-DD):",
+                          txn.date
+                        );
+                        const newCategory = prompt(
+                          "Enter new category:",
+                          txn.category
+                        );
                         if (
-                          newDescription &&
-                          newDescription !== txn.description
+                          (newDescription &&
+                            newDescription !== txn.description) ||
+                          (newAmount && newAmount !== txn.amount.toString()) ||
+                          (newDate && newDate !== txn.date) ||
+                          (newCategory && newCategory !== txn.category)
                         ) {
                           try {
                             await axios.put(`/api/edit-transaction`, {
                               id: txn._id,
                               description: newDescription,
+                              amount: newAmount,
+                              date: newDate,
+                              category: newCategory,
                             });
                             setTransactions((prev) =>
                               prev.map((t) =>
                                 t._id === txn._id
-                                  ? { ...t, description: newDescription }
+                                  ? {
+                                      ...t,
+                                      description:
+                                        newDescription || t.description,
+                                      amount: newAmount
+                                        ? parseFloat(newAmount)
+                                        : t.amount,
+                                      date: newDate || t.date,
+                                      category: newCategory || t.category,
+                                    }
                                   : t
                               )
                             );
