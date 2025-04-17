@@ -4,7 +4,9 @@ import TransactionModel from "@/models/Transaction";
 export async function GET(_request: Request) {
   try {
     await dbConnect();
+    const body = await _request.json();
 
+    console.log(body, "body");
     const transactions = await TransactionModel.find({}).sort({
       createdAt: -1,
     });

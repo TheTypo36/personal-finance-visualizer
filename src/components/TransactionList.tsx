@@ -15,7 +15,7 @@ type Transaction = {
 export default function TransactionList({ refresh }: { refresh?: boolean }) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  const editTransactionHandler = useEffect(() => {
+  useEffect(() => {
     const fetchTransactions = async () => {
       const res = await axios.get("/api/get-transactions");
       setTransactions(res.data.transactions);
